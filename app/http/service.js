@@ -26,7 +26,6 @@ exports['@implements'] = [
   'http://i.bixbyjs.org/http/Service',
   'http://schemas.modulate.io/js/http/TrackBackService'
 ];
-exports['@path'] = '/trackback';
 exports['@require'] = [
   './handlers/ping'
 ];

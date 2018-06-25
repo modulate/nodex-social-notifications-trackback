@@ -14,7 +14,13 @@
       "url": "http://opensource.org/licenses/MIT"
     }
   ],
-  "main": "./lib",
+  "main": "./app",
+  "assembly": {
+    "namespace": "io.modulate/social/trackback",
+    "components": [
+      "http/service"
+    ]
+  },
   "devDependencies": {
     "make-node": "^0.3.0",
     "mocha": "^2.0.0",
