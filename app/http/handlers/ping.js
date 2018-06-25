@@ -21,7 +21,7 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
   function handle(req, res, next) {
     // TODO: Add title, exerpt, blog name, and language options
     
-    linkbacks.link(req.body.url, req.locals.target, function(err) {
+    linkbacks.ping(req.body.url, req.locals.target, function(err) {
       // TODO: handle errors
       //res.status(202).send('http://alice.host/webmentions/222')
       
@@ -44,7 +44,7 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
 }
 
 exports['@require'] = [
-  'http://schemas.modulate.io/js/social/ILinkbackService'
+  'http://schemas.modulate.io/js/social/ILinkbackService',
   'http://i.bixbyjs.org/http/middleware/parse',
   'http://i.bixbyjs.org/http/middleware/authenticate',
 ];
