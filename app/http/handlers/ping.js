@@ -27,8 +27,9 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
       
       var doc = xml.create('response', { encoding: 'utf-8' })
         .ele('error', '0')
-        .end({ pretty: true});
+        .end({ pretty: true });
       
+      res.setHeader('Content-Type', 'application/xml');
       res.status(200).send(doc)
     });
   }

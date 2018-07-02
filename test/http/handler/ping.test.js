@@ -91,9 +91,10 @@ describe('http/handlers/ping', function() {
       
       it('should respond', function() {
         expect(response.statusCode).to.equal(200);
-        //expect(response.body).to.equal(undefined);
+        expect(response.getHeader('Content-Type')).to.equal('application/xml')
+        expect(response.data).to.equal('<?xml version="1.0" encoding="utf-8"?>\n<response>\n  <error>0</error>\n</response>');
       });
-    }); // accepting a notification
+    }); // receiving a ping
     
   }); // handler
   
