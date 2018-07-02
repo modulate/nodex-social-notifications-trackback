@@ -1,5 +1,5 @@
 {
-  "name": "nodex-social-trackback",
+  "name": "@modulate/social-trackback",
   "version": "0.0.0",
   "description": "",
   "author": {
@@ -25,9 +25,10 @@
     "xmlbuilder": "^10.0.0"
   },
   "devDependencies": {
+    "chai": "^3.0.0",
+    "chai-express-handler": "0.0.3",
     "make-node": "^0.3.0",
     "mocha": "^2.0.0",
-    "chai": "^3.0.0",
     "sinon": "^4.0.2",
     "sinon-chai": "^2.14.0"
   },
