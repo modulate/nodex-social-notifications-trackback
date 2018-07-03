@@ -14,6 +14,7 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
   // TODO: Error if no URL specificifed
   
   function resolveTarget(req, res, next) {
+    req.locals = req.locals || {};
     req.locals.target = 'http://www.example.com/' + req.params[0];
     next();
   }
@@ -35,6 +36,8 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
   }
   
   // curl --data "source=http://bob.host/post-by-bob&target=http://alice.host/post-by-alice" http://127.0.0.1:8080/
+  
+  // curl --data "title=Foo+Bar&url=http://www.bar.com/&excerpt=My+Excerpt&blog_name=Foo" http://127.0.0.1:8080/trackback
   
   return [
     parse('application/x-www-form-urlencoded'),
