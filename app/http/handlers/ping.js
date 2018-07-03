@@ -7,7 +7,7 @@
  * linkback port.  The actual adapter that will be utilized is injected by the
  * IoC container, and is expected to be implemented by the application.
  */
-exports = module.exports = function(linkbacks, parse, authenticate) {
+exports = module.exports = function(linkbacks, parse, errorLogging, authenticate) {
   var xml = require('xmlbuilder');
   
   
@@ -35,6 +35,16 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
     });
   }
   
+  function errorHandler(err, req, res, next) {
+    var doc = xml.create('response', { encoding: 'utf-8' })
+      .ele('error', '1')
+      .ele('message', err.message)
+      .end({ pretty: true });
+    
+    res.setHeader('Content-Type', 'application/xml');
+    res.status(200).send(doc)
+  }
+  
   // curl --data "source=http://bob.host/post-by-bob&target=http://alice.host/post-by-alice" http://127.0.0.1:8080/
   
   // curl --data "title=Foo+Bar&url=http://www.bar.com/&excerpt=My+Excerpt&blog_name=Foo" http://127.0.0.1:8080/trackback
@@ -43,12 +53,15 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
     parse('application/x-www-form-urlencoded'),
     //authenticate([ 'anonymous' ]),
     resolveTarget,
-    handle
+    handle,
+    errorLogging(),
+    errorHandler
   ];
 }
 
 exports['@require'] = [
   'http://schemas.modulate.io/js/social/ILinkbackService',
   'http://i.bixbyjs.org/http/middleware/parse',
+  'http://i.bixbyjs.org/http/middleware/errorLogging'
   //'http://i.bixbyjs.org/http/middleware/authenticate',
 ];
