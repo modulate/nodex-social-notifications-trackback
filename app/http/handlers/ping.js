@@ -38,7 +38,7 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
   
   return [
     parse('application/x-www-form-urlencoded'),
-    authenticate([ 'anonymous' ]),
+    //authenticate([ 'anonymous' ]),
     resolveTarget,
     handle
   ];
@@ -47,5 +47,5 @@ exports = module.exports = function(linkbacks, parse, authenticate) {
 exports['@require'] = [
   'http://schemas.modulate.io/js/social/ILinkbackService',
   'http://i.bixbyjs.org/http/middleware/parse',
-  'http://i.bixbyjs.org/http/middleware/authenticate',
+  //'http://i.bixbyjs.org/http/middleware/authenticate',
 ];

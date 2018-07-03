@@ -76,7 +76,7 @@ describe('http/handlers/ping', function() {
         expect(parseSpy).to.be.calledWithExactly('application/x-www-form-urlencoded');
       });
       
-      it('should authenticate', function() {
+      it.skip('should authenticate', function() {
         expect(request.authInfo).to.deep.equal({
           method: [ 'anonymous' ]
         });
