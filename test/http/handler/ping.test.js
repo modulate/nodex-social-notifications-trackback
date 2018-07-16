@@ -22,8 +22,10 @@ describe('http/handlers/ping', function() {
       ping: function(){}
     };
     
-    function parse() {
+    function parse(type) {
       return function(req, res, next) {
+        req.__ = req.__ || {};
+        req.__.supportedMediaType = type;
         next();
       };
     }
@@ -38,7 +40,6 @@ describe('http/handlers/ping', function() {
     
     describe('receiving a ping', function() {
       var request, response;
-      var parseSpy;
       
       before(function() {
         sinon.stub(linkbacks, 'ping').yields(null);
@@ -49,9 +50,7 @@ describe('http/handlers/ping', function() {
       });
       
       before(function(done) {
-        parseSpy = sinon.spy(parse);
-        
-        var handler = factory(linkbacks, parseSpy, authenticate);
+        var handler = factory(linkbacks, parse, authenticate);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -72,8 +71,7 @@ describe('http/handlers/ping', function() {
       });
       
       it('should add parse middleware to stack', function() {
-        expect(parseSpy.callCount).to.equal(1);
-        expect(parseSpy).to.be.calledWithExactly('application/x-www-form-urlencoded');
+        expect(request.__.supportedMediaType).to.equal('application/x-www-form-urlencoded');
       });
       
       it.skip('should authenticate', function() {
