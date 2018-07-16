@@ -64,7 +64,7 @@ exports = module.exports = function(linkbacks, parse, errorLogging, authenticate
 }
 
 exports['@require'] = [
-  'http://schemas.modulate.io/js/social/ILinkbackService',
+  'http://schemas.modulate.io/js/social/notifications/LinkbackService',
   'http://i.bixbyjs.org/http/middleware/parse',
   'http://i.bixbyjs.org/http/middleware/errorLogging'
   //'http://i.bixbyjs.org/http/middleware/authenticate',
