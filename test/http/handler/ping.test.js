@@ -37,8 +37,17 @@ describe('http/handlers/ping', function() {
       };
     }
     
+    function errorLogging() {
+      return function(err, req, res, next) {
+        req.__ = req.__ || {};
+        req.__.log = req.__.log || [];
+        req.__.log.push(err.message);
+        next(err);
+      }
+    }
     
-    describe('receiving a ping', function() {
+    
+    describe('processing a ping', function() {
       var request, response;
       
       before(function() {
@@ -50,12 +59,11 @@ describe('http/handlers/ping', function() {
       });
       
       before(function(done) {
-        var handler = factory(linkbacks, parse, authenticate);
+        var handler = factory(linkbacks, parse, /*authenticate,*/ errorLogging);
         
         chai.express.handler(handler)
           .req(function(req) {
             request = req;
-            req.locals = {};
             req.params = [ '5' ];
             req.body = {
               url: 'http://www.bar.com/'
@@ -70,7 +78,7 @@ describe('http/handlers/ping', function() {
           .dispatch();
       });
       
-      it('should add parse middleware to stack', function() {
+      it('should parse request body', function() {
         expect(request.__.supportedMediaType).to.equal('application/x-www-form-urlencoded');
       });
       
@@ -92,7 +100,66 @@ describe('http/handlers/ping', function() {
         expect(response.getHeader('Content-Type')).to.equal('application/xml')
         expect(response.data).to.equal('<?xml version="1.0" encoding="utf-8"?>\n<response>\n  <error>0</error>\n</response>');
       });
-    }); // receiving a ping
+    }); // processing a ping
+    
+    describe('encountering an error processing a ping', function() {
+      var request, response;
+      
+      before(function() {
+        sinon.stub(linkbacks, 'ping').yields(new Error('something went wrong'));
+      });
+    
+      after(function() {
+        linkbacks.ping.restore();
+      });
+      
+      before(function(done) {
+        var handler = factory(linkbacks, parse, /*authenticate,*/ errorLogging);
+        
+        chai.express.handler(handler)
+          .req(function(req) {
+            request = req;
+            req.params = [ '5' ];
+            req.body = {
+              url: 'http://www.bar.com/'
+            }
+          })
+          .res(function(res) {
+            response = res;
+          })
+          .end(function() {
+            done();
+          })
+          .dispatch();
+      });
+      
+      it('should parse request body', function() {
+        expect(request.__.supportedMediaType).to.equal('application/x-www-form-urlencoded');
+      });
+      
+      it.skip('should authenticate', function() {
+        expect(request.authInfo).to.deep.equal({
+          method: [ 'anonymous' ]
+        });
+      });
+      
+      it('should ping linkback service', function() {
+        expect(linkbacks.ping.callCount).to.equal(1);
+        var call = linkbacks.ping.getCall(0)
+        expect(call.args[0]).to.equal('http://www.bar.com/');
+        expect(call.args[1]).to.equal('http://www.example.com/5');
+      });
+      
+      it('should log error', function() {
+        expect(request.__.log).to.deep.equal([ 'something went wrong' ]);
+      });
+      
+      it('should respond', function() {
+        expect(response.statusCode).to.equal(500);
+        expect(response.getHeader('Content-Type')).to.equal('application/xml')
+        expect(response.data).to.equal('<?xml version="1.0" encoding="utf-8"?>\n<response>\n  <error>1</error>\n  <message>something went wrong</message>\n</response>');
+      });
+    }); // encountering an error processing a ping
     
   }); // handler
   

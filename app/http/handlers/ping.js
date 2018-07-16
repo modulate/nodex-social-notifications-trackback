@@ -7,7 +7,7 @@
  * linkback port.  The actual adapter that will be utilized is injected by the
  * IoC container, and is expected to be implemented by the application.
  */
-exports = module.exports = function(linkbacks, parse, errorLogging, authenticate) {
+exports = module.exports = function(linkbacks, parse, /*authenticate,*/ errorLogging) {
   var xml = require('xmlbuilder');
   
   
@@ -41,12 +41,12 @@ exports = module.exports = function(linkbacks, parse, errorLogging, authenticate
   
   function errorHandler(err, req, res, next) {
     var doc = xml.create('response', { encoding: 'utf-8' })
-      .ele('error', '1')
+      .ele('error', '1').up()
       .ele('message', err.message)
       .end({ pretty: true });
     
     res.setHeader('Content-Type', 'application/xml');
-    res.status(200).send(doc)
+    res.status(500).send(doc)
   }
   
   // curl --data "source=http://bob.host/post-by-bob&target=http://alice.host/post-by-alice" http://127.0.0.1:8080/
@@ -66,6 +66,6 @@ exports = module.exports = function(linkbacks, parse, errorLogging, authenticate
 exports['@require'] = [
   'http://schemas.modulate.io/js/social/notifications/LinkbackService',
   'http://i.bixbyjs.org/http/middleware/parse',
-  'http://i.bixbyjs.org/http/middleware/errorLogging'
   //'http://i.bixbyjs.org/http/middleware/authenticate',
+  'http://i.bixbyjs.org/http/middleware/errorLogging'
 ];
