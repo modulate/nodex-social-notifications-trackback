@@ -24,7 +24,7 @@ exports = module.exports = function(pingHandler) {
 
 exports['@implements'] = [
   'http://i.bixbyjs.org/http/Service',
-  'http://schemas.modulate.io/js/http/TrackBackService'
+  'http://schemas.modulate.io/js/social/notifications/trackback/HTTPService'
 ];
 exports['@require'] = [
   './handlers/ping'
