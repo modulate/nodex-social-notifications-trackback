@@ -1,11 +1,22 @@
 {
-  "name": "@modulate/social-trackback",
+  "name": "@modulate/social-notifications-trackback",
   "version": "0.0.0",
-  "description": "",
+  "description": "TrackBack protocol components for building social web applications with Bixby.js.",
+  "keywords": [
+    "linkback",
+    "trackback"
+  ],
   "author": {
     "name": "Jared Hanson",
     "email": "jaredhanson@gmail.com",
     "url": "http://www.jaredhanson.net/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/modulate/nodex-social-notifications-trackback.git"
+  },
+  "bugs": {
+    "url": "http://github.com/modulate/nodex-social-notifications-trackback/issues"
   },
   "license": "MIT",
   "licenses": [
@@ -16,7 +27,7 @@
   ],
   "main": "./app",
   "assembly": {
-    "namespace": "io.modulate/social/trackback",
+    "namespace": "io.modulate/social/notifications/trackback",
     "components": [
       "http/service"
     ]
